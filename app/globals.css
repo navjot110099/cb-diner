@@ -1,0 +1,214 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), "Times New Roman", Georgia, serif;
+  --font-heading: var(--font-display);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ivory: var(--ivory);
+  --color-linen: var(--linen);
+  --color-linen-deep: var(--linen-deep);
+  --color-espresso: var(--espresso);
+  --color-espresso-soft: var(--espresso-soft);
+  --color-stone: var(--stone);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-deep: var(--gold-deep);
+  --color-rose-gold: var(--rose-gold);
+  --color-sage: var(--sage);
+  --color-wine: var(--wine);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --animate-ring-pulse: ring-pulse 1.8s ease-out infinite;
+  --animate-ticket-in: ticket-in 1.2s ease-out;
+
+  @keyframes ring-pulse {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--gold) 55%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 14px transparent;
+    }
+  }
+  @keyframes ticket-in {
+    0% {
+      background-color: color-mix(in oklab, var(--gold-light) 55%, white);
+    }
+    100% {
+      background-color: var(--card);
+    }
+  }
+}
+
+/*
+ * CB Diner palette — ivory linen, espresso and champagne gold, like a
+ * letterpressed menu card with gold-foil details. Gold for text uses the
+ * deeper shade so it stays readable (WCAG AA) on ivory.
+ */
+:root {
+  --ivory: #f8f5ef;
+  --linen: #f1ece3;
+  --linen-deep: #e6ded1;
+  --espresso: #1e1a17;
+  --espresso-soft: #3a322c;
+  --stone: #6e655c;
+  --gold: #b8935a;
+  --gold-light: #d9be8c;
+  --gold-deep: #7d5f33;
+  --rose-gold: #9c6b5a;
+  --sage: #5b7656;
+  --wine: #7a2e2e;
+
+  --background: var(--ivory);
+  --foreground: var(--espresso);
+  --card: #ffffff;
+  --card-foreground: var(--espresso);
+  --popover: #ffffff;
+  --popover-foreground: var(--espresso);
+  --primary: var(--espresso);
+  --primary-foreground: var(--ivory);
+  --secondary: var(--linen);
+  --secondary-foreground: var(--espresso);
+  --muted: var(--linen);
+  --muted-foreground: var(--stone);
+  --accent: #f3ead9;
+  --accent-foreground: var(--gold-deep);
+  --destructive: #a3362b;
+  --border: #e7e0d4;
+  --input: #ddd4c5;
+  --ring: var(--gold);
+  --chart-1: var(--gold);
+  --chart-2: var(--rose-gold);
+  --chart-3: var(--espresso-soft);
+  --chart-4: var(--gold-light);
+  --chart-5: var(--sage);
+  --radius: 0.75rem;
+
+  --gold-gradient: linear-gradient(120deg, #e8d3a8 0%, #d2b07a 30%, #b8935a 62%, #9c6b5a 100%);
+  --night-gradient: linear-gradient(165deg, #2a241f 0%, #1e1a17 55%, #141110 100%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  .font-display {
+    letter-spacing: -0.01em;
+    /* Cormorant defaults to old-style figures; prices and stats read better lining.
+       Setting Tailwind's variable too keeps it when `tabular-nums` is added. */
+    --tw-numeric-figure: lining-nums;
+    font-variant-numeric: lining-nums;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--gold-light) 60%, transparent);
+  }
+}
+
+@utility bg-gold {
+  background-image: var(--gold-gradient);
+}
+
+@utility bg-night {
+  background-image: var(--night-gradient);
+}
+
+@utility text-gold-gradient {
+  background-image: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Small-caps label used for eyebrows and section kickers. */
+@utility eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Hairline with fading gold ends. */
+@utility gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+  opacity: 0.55;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Skip layout/paint for off-screen menu sections on low-end phones. */
+@utility cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+@utility pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}

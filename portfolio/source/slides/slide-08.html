@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CB Diner — 08 Inner pages</title>
+<link rel="stylesheet" href="deck.css">
+<script src="../shots/anchors.js"></script>
+<style>
+  .head { position: absolute; left: 96px; top: 146px; width: 1808px; display: flex; align-items: end; justify-content: space-between; gap: 40px; }
+  .head .headline { margin-top: 16px; font-size: 60px; }
+  .head .sub { margin: 0 0 6px; width: 560px; font-size: 19px; }
+  .grid { position: absolute; left: 96px; top: 282px; width: 1808px; display: grid; grid-template-columns: repeat(3, 500px); justify-content: space-between; row-gap: 40px; }
+  .cell { position: relative; }
+  .cell .browser { position: relative; box-shadow: var(--shadow-sm), 0 30px 60px -40px rgba(30, 26, 23, 0.35); }
+  .cap { margin-top: 14px; display: flex; gap: 12px; align-items: baseline; }
+  .cap b { font-size: 18px; font-weight: 600; white-space: nowrap; }
+  .cap span { font-size: 15px; color: var(--stone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top" data-label="Inner pages" data-n="8"></div>
+
+  <div class="head">
+    <div>
+      <div class="eyebrow">Beyond the menu</div>
+      <h2 class="headline">Every screen, <em>same polish</em>.</h2>
+    </div>
+    <p class="sub">The guest pages, staff tools and the offline fallback all share one design system.</p>
+  </div>
+
+  <div class="grid">
+    <div class="cell"><div class="browser sm" data-shot="d-order-live" data-url="cbdiner.example/order/…" style="width: 500px;"></div><div class="cap"><b>Live order status</b><span>Received → In the kitchen → Served</span></div></div>
+    <div class="cell"><div class="browser sm" data-shot="d-admin" data-url="cbdiner.example/admin" style="width: 500px;"></div><div class="cap"><b>Owner overview</b><span>Tonight's sales, average check, latest orders</span></div></div>
+    <div class="cell"><div class="browser sm" data-shot="d-qr" data-url="cbdiner.example/admin/qr" style="width: 500px;"></div><div class="cap"><b>Table QR codes</b><span>Printable card per table</span></div></div>
+    <div class="cell"><div class="browser sm" data-shot="d-home-visit" data-url="cbdiner.example/#visit" style="width: 500px;"></div><div class="cap"><b>Hours, map &amp; contact</b><span>Today highlighted, map loads on tap</span></div></div>
+    <div class="cell"><div class="browser sm" data-shot="d-login" data-url="cbdiner.example/staff/login" style="width: 500px;"></div><div class="cap"><b>Staff sign-in</b><span>Kitchen and owner roles</span></div></div>
+    <div class="cell"><div class="browser sm" data-shot="d-offline" data-url="cbdiner.example/offline" style="width: 500px;"></div><div class="cap"><b>Offline fallback</b><span>Shown by the service worker</span></div></div>
+  </div>
+</div>
+<script src="deck.js"></script>
+</body>
+</html>
