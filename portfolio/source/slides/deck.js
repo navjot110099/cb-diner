@@ -39,7 +39,7 @@
   document.querySelectorAll(".browser[data-shot]").forEach((b) => {
     const bar = document.createElement("div");
     bar.className = "bar";
-    bar.innerHTML = `<i></i><i></i><i></i><span class="url">${b.dataset.url || "cbdiner.example"}</span><span class="sp"></span>`;
+    bar.innerHTML = `<i></i><i></i><i></i><span class="url">${b.dataset.url || "cb-diner.vercel.app"}</span><span class="sp"></span>`;
     const screen = buildScreen(b, b.dataset.shot);
     b.prepend(bar);
     b.appendChild(screen);

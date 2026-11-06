@@ -161,7 +161,7 @@ scripts/                   seed, assets, screenshots
 `portfolio/slide-01.png … slide-10.png` (2000×1125) and `portfolio/upwork.md` are built from real screens:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://cbdiner.example npm run build && npm start -- -p 3117
+NEXT_PUBLIC_SITE_URL=https://cb-diner.vercel.app npm run build && npm start -- -p 3117
 PORTFOLIO_BASE_URL=http://localhost:3117 npx tsx portfolio/source/capture.ts   # 1440×900 @2x, 390×844 @3x + marker anchors
 npx tsx portfolio/source/render.ts                                              # HTML slides → PNG
 ```
