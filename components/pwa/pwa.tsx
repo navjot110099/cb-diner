@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
+import { log } from "@/lib/log";
 
 /* ---------------------------------------------------------------------------
  * Install prompt store. Chrome fires `beforeinstallprompt` once per page load;
@@ -109,7 +110,7 @@ export function PwaRoot() {
           .filter((u) => u.startsWith(location.origin) && /\/_next\/static\/|\/food\/|\/img\/|\/icons\//.test(u));
         ready.active?.postMessage({ type: "CACHE_URLS", urls, page: location.pathname + location.search });
       } catch (error) {
-        console.warn("Service worker registration failed", error);
+        log.warn("Service worker registration failed", error);
       }
     };
     if (document.readyState === "complete") register();

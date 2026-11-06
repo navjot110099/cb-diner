@@ -4,9 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, m } from "framer-motion";
 import { toast } from "sonner";
-import { Bell, BellOff, ChefHat, CircleCheck, LayoutDashboard, LogOut, Plus, RotateCcw, ShoppingBag, Wifi, WifiOff, X } from "lucide-react";
+import { Bell, BellOff, ChefHat, CircleCheck, LayoutDashboard, LogOut, RotateCcw, ShoppingBag, Wifi, WifiOff, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LogoMark } from "@/components/brand/logo";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { audioReady, playChime, unlockAudio } from "@/components/kitchen/chime";
 import { useLiveOrders, type LiveMode } from "@/components/kitchen/use-live-orders";
 import { signOut } from "@/app/staff/actions";
@@ -24,12 +25,21 @@ const COLUMNS: { status: "new" | "preparing" | "served"; title: string; hint: st
 const SOUND_KEY = "cb-kitchen-sound";
 const SERVED_WINDOW = 3 * 3600_000;
 
-export function KitchenBoard({ initial, mode, staff, demo }: { initial: Order[]; mode: LiveMode; staff: StaffUser; demo: boolean }) {
+type BoardProps = { initial: Order[]; mode: LiveMode; staff: StaffUser };
+
+export function KitchenBoard(props: BoardProps) {
+  return (
+    <MotionProvider>
+      <Board {...props} />
+    </MotionProvider>
+  );
+}
+
+function Board({ initial, mode, staff }: BoardProps) {
   const [soundOn, setSoundOn] = useState(false);
   const [now, setNow] = useState(() => clockNow());
   const [fresh, setFresh] = useState<Set<string>>(new Set());
   const [tab, setTab] = useState<"new" | "preparing" | "served">("new");
-  const [simulating, setSimulating] = useState(false);
   const wakeLock = useRef<{ release: () => Promise<void> } | null>(null);
 
   const onArrive = useCallback(
@@ -47,7 +57,7 @@ export function KitchenBoard({ initial, mode, staff, demo }: { initial: Order[];
     [soundOn],
   );
 
-  const { orders, connection, setStatus, refetch } = useLiveOrders(initial, mode, onArrive);
+  const { orders, connection, setStatus } = useLiveOrders(initial, mode, onArrive);
 
   // Minute ticker for "x min ago" and late-order colours.
   useEffect(() => {
@@ -124,16 +134,6 @@ export function KitchenBoard({ initial, mode, staff, demo }: { initial: Order[];
     if (!ok) toast.error(`Couldn’t update #${order.number}. Check the connection.`);
   };
 
-  const simulate = async () => {
-    setSimulating(true);
-    try {
-      await fetch("/api/demo/simulate-order", { method: "POST" });
-      await refetch();
-    } finally {
-      setSimulating(false);
-    }
-  };
-
   const todayRevenue = orders.filter((o) => o.status !== "cancelled").reduce((s, o) => s + o.total, 0);
 
   return (
@@ -147,12 +147,7 @@ export function KitchenBoard({ initial, mode, staff, demo }: { initial: Order[];
               {staff.name} · {grouped.new.length + grouped.preparing.length} open · {dollars(todayRevenue)} today
             </p>
           </div>
-          <ConnectionPill connection={connection} realtime={mode.kind === "realtime"} />
-          {demo && (
-            <Button size="sm" onClick={simulate} disabled={simulating} className="h-9 rounded-full bg-white/8 px-3 text-ivory ring-1 ring-white/20 hover:bg-white/15">
-              <Plus /> Simulate order
-            </Button>
-          )}
+          <ConnectionPill connection={connection} />
           <Button
             size="sm"
             onClick={toggleSound}
@@ -225,14 +220,13 @@ export function KitchenBoard({ initial, mode, staff, demo }: { initial: Order[];
           </section>
         ))}
       </main>
-      <footer className="px-6 pb-4 text-center text-xs text-stone">Demo project by OVIOWEB</footer>
     </div>
   );
 }
 
-function ConnectionPill({ connection, realtime }: { connection: string; realtime: boolean }) {
+function ConnectionPill({ connection }: { connection: string }) {
   const label =
-    connection === "live" ? "Live · Realtime" : connection === "polling" ? (realtime ? "Live · syncing" : "Live · demo sync 3s") : connection === "offline" ? "Offline" : "Connecting…";
+    connection === "live" ? "Live · Realtime" : connection === "polling" ? "Live" : connection === "offline" ? "Offline" : "Connecting…";
   const ok = connection === "live" || connection === "polling";
   return (
     <span className={cn("hidden h-9 items-center gap-2 rounded-full px-3 text-xs font-semibold ring-1 sm:inline-flex", ok ? "bg-white/8 ring-white/15" : "bg-rose-gold ring-rose-gold")}>
@@ -352,7 +346,7 @@ function Ticket({
         )}
         {(order.status === "served" || order.status === "cancelled") && (
           <>
-            <span className={cn("flex-1 px-1 text-sm font-semibold", order.status === "served" ? "text-sage" : "text-rose-gold")}>
+            <span className={cn("flex-1 px-1 text-sm font-semibold", order.status === "served" ? "text-sage-deep" : "text-rose-deep")}>
               {order.status === "served" ? `Served ${clockTime(order.updatedAt)}` : "Cancelled"}
             </span>
             <Button variant="ghost" size="sm" className="h-9 rounded-lg text-stone" onClick={() => onMove(order, "preparing")}>

@@ -5,8 +5,8 @@ export const NO_DIET_MARKS = new Set(["bar"]);
 import { cn } from "@/lib/utils";
 
 const MARKS = [
-  { key: "v", label: "Vegetarian", short: "V", className: "border-sage/50 text-sage" },
-  { key: "vegan", label: "Vegan", short: "VG", className: "border-sage/50 text-sage" },
+  { key: "v", label: "Vegetarian", short: "V", className: "border-sage/50 text-sage-deep" },
+  { key: "vegan", label: "Vegan", short: "VG", className: "border-sage/50 text-sage-deep" },
   { key: "gf", label: "Gluten-free", short: "GF", className: "border-stone/40 text-stone" },
 ] as const;
 

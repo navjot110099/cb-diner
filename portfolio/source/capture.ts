@@ -240,13 +240,15 @@ async function desktop(browser: Browser) {
   // Kitchen -------------------------------------------------------------------------------
   const staff = await ctx.newPage();
   await staffSignIn(staff, "kitchen");
-  await staff.getByRole("button", { name: "Simulate order" }).click();
-  await staff.waitForTimeout(1500);
+  // A second table orders while the kitchen screen is open, so it arrives as a fresh, ringing ticket.
+  await staff.request.post(`${BASE}/api/orders`, {
+    data: { table: "11", customerName: "James", note: "Nut allergy at the table", lines: [{ itemId: "grand-seafood-tower", qty: 1 }, { itemId: "champagne-glass", qty: 2 }] },
+  });
+  await staff.waitForTimeout(4000);
   await staff.evaluate(() => window.scrollTo(0, 0));
   await shot(staff, "d-kitchen", {
-    pill: staff.getByText(/^Live · /),
+    pill: staff.getByText(/^Live/),
     sound: staff.getByRole("button", { name: /Enable sound/ }),
-    simulate: staff.getByRole("button", { name: "Simulate order" }),
     fresh: staff.locator("article", { has: staff.getByText("NEW", { exact: true }) }),
     late: staff.locator("article span.bg-rose-gold").first(),
     start: staff.getByRole("button", { name: /Start \/ fire/ }).first(),

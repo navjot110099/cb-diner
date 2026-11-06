@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Hanken_Grotesk } from "next/font/google";
-import { MotionProvider } from "@/components/motion/motion-provider";
 import { PwaRoot } from "@/components/pwa/pwa";
 import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({ variable: "--font-cormorant", subsets: ["latin"], weight: ["500", "600", "700"], style: ["normal", "italic"], display: "swap" });
+// Headings only use Cormorant 600; the italic face is just for the gold accents on the homepage, so it isn't preloaded.
+const cormorant = Cormorant_Garamond({ variable: "--font-cormorant", subsets: ["latin"], weight: "600", display: "swap" });
+const cormorantItalic = Cormorant_Garamond({ variable: "--font-cormorant-italic", subsets: ["latin"], weight: "500", style: "italic", display: "swap", preload: false });
 const hanken = Hanken_Grotesk({ variable: "--font-hanken", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
@@ -22,7 +23,6 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
   openGraph: { type: "website", siteName: "CB Diner", locale: "en_US", url: "/" },
   twitter: { card: "summary_large_image" },
-  alternates: { canonical: "/" },
   icons: {
     icon: [
       { url: "/icons/icon-32.png", sizes: "32x32", type: "image/png" },
@@ -53,7 +53,7 @@ const IOS_SPLASH = [
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${hanken.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${cormorantItalic.variable} ${hanken.variable}`}>
       <head>
         {IOS_SPLASH.map(({ w, h, r }) => (
           <link
@@ -65,7 +65,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         ))}
       </head>
       <body className="min-h-dvh antialiased">
-        <MotionProvider>{children}</MotionProvider>
+        {children}
         <PwaRoot />
       </body>
     </html>

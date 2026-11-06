@@ -82,7 +82,7 @@ export function MenuManager({ categories, items }: { categories: Category[]; ite
               </p>
             </div>
             <label className="flex shrink-0 items-center gap-2.5 text-sm">
-              <span className={cn("hidden w-16 text-right sm:inline", item.isAvailable ? "text-sage" : "text-stone")}>{item.isAvailable ? "On menu" : "Sold out"}</span>
+              <span className={cn("hidden w-16 text-right sm:inline", item.isAvailable ? "text-sage-deep" : "text-stone")}>{item.isAvailable ? "On menu" : "Sold out"}</span>
               <Switch
                 checked={item.isAvailable}
                 onCheckedChange={(v) => toggle(item, v)}

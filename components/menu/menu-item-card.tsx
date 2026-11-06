@@ -12,10 +12,10 @@ import { cn } from "@/lib/utils";
 export const MenuItemCard = memo(function MenuItemCard({ item, onOpen, priority = false }: { item: MenuItem; onOpen: (item: MenuItem) => void; priority?: boolean }) {
   const soldOut = !item.isAvailable;
   return (
-    <article id={`dish-${item.id}`} className={cn("group flex gap-4 py-6", soldOut && "opacity-60")} aria-labelledby={`dish-${item.id}-name`}>
+    <article id={`dish-${item.id}`} className="group flex gap-4 py-6" aria-labelledby={`dish-${item.id}-name`}>
       <div className="min-w-0 flex-1">
         <DishTags tags={item.tags} />
-        <h3 id={`dish-${item.id}-name`} className="mt-1.5 font-display text-[1.35rem] leading-[1.15] font-semibold text-espresso">
+        <h3 id={`dish-${item.id}-name`} className={cn("mt-1.5 font-display text-[1.35rem] leading-[1.15] font-semibold", soldOut ? "text-stone" : "text-espresso")}>
           <button type="button" onClick={() => onOpen(item)} className="text-left decoration-gold/60 underline-offset-4 hover:underline focus-visible:underline">
             {item.name}
           </button>
@@ -30,7 +30,7 @@ export const MenuItemCard = memo(function MenuItemCard({ item, onOpen, priority 
       <div className={cn("relative flex w-[118px] shrink-0 flex-col items-center", item.image ? "pb-4" : "justify-center")}>
         {item.image && (
           <button type="button" onClick={() => onOpen(item)} className="block overflow-hidden rounded-2xl ring-1 ring-black/5" aria-label={item.name} tabIndex={-1}>
-            <FoodImage src={item.image.thumb} alt={item.name} priority={priority} className={cn("size-[118px] transition-transform duration-500 group-hover:scale-[1.05]", soldOut && "grayscale")} />
+            <FoodImage src={item.image.thumb} alt={item.name} priority={priority} sizes="118px" className={cn("size-[118px] transition-transform duration-500 group-hover:scale-[1.05]", soldOut && "opacity-60 grayscale")} />
           </button>
         )}
         <AddButton item={item} className={cn("w-[100px]", item.image ? "absolute -bottom-1" : "")} />

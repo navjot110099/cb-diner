@@ -66,13 +66,34 @@ export function InstallCard({ className, dismissible = true }: { className?: str
   );
 }
 
-/** Compact header button, shown only when the browser can install the app. */
-export function InstallButton({ className }: { className?: string }) {
-  const { canPrompt, install } = useInstall();
-  if (!canPrompt) return null;
+/**
+ * Header install button. Opens the native prompt where the browser offers one
+ * (Chrome, Edge, Android); on iPhone it toggles the Share → Add to Home Screen
+ * hint. Renders nothing once the app is installed.
+ */
+export function InstallButton({ className, compact = false }: { className?: string; compact?: boolean }) {
+  const { canPrompt, iosHint, install } = useInstall();
+  const [hint, setHint] = useState(false);
+  if (!canPrompt && !iosHint) return null;
+  const onClick = () => (canPrompt ? void install() : setHint((v) => !v));
   return (
-    <Button variant="outline" size="sm" className={cn("h-9 rounded-full", className)} onClick={() => install()}>
-      <Download /> Install app
-    </Button>
+    <span className="relative inline-flex">
+      <Button
+        variant="outline"
+        size={compact ? "icon" : "sm"}
+        aria-label={compact ? "Install app" : undefined}
+        aria-expanded={iosHint ? hint : undefined}
+        className={cn(compact ? "size-10 rounded-full" : "h-9 rounded-full", className)}
+        onClick={onClick}
+      >
+        <Download /> {!compact && "Install app"}
+      </Button>
+      {hint && (
+        <span role="status" className="absolute top-12 right-0 z-50 w-56 rounded-2xl bg-card p-3 text-left text-[13px] leading-snug text-espresso shadow-[0_14px_36px_-18px_rgba(30,26,23,.6)] ring-1 ring-border">
+          <Share className="mb-1 size-4 text-gold-deep" />
+          Tap <b>Share</b>, then <b>Add to Home Screen</b> to install CB Diner.
+        </span>
+      )}
+    </span>
   );
 }

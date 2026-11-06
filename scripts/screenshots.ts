@@ -165,8 +165,11 @@ async function capture(browser: Browser, vp: Viewport) {
   const staff = await context.newPage();
   await staffSignIn(staff, "kitchen");
   await shot(staff, vp, "11-kitchen");
-  await staff.getByRole("button", { name: "Simulate order" }).click();
-  await staff.waitForTimeout(1200);
+  // A second table orders while the kitchen screen is open, so it arrives as a fresh, ringing ticket.
+  await staff.request.post(`${BASE}/api/orders`, {
+    data: { table: "11", customerName: "James", note: "Nut allergy at the table", lines: [{ itemId: "grand-seafood-tower", qty: 1 }, { itemId: "champagne-glass", qty: 2 }] },
+  });
+  await staff.waitForTimeout(4000);
   await staff.evaluate(() => window.scrollTo(0, 0));
   await shot(staff, vp, "12-kitchen-new-ticket");
 

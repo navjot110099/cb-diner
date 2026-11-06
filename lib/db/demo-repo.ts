@@ -2,16 +2,17 @@ import "server-only";
 import { now } from "@/lib/clock";
 import { SEED_CATEGORIES, SEED_ITEMS } from "@/lib/demo/seed";
 import { NotFoundError, priceOrder, slugify, type Repo } from "@/lib/db/repo";
-import type { Category, MenuItem, Order, OrderStatus } from "@/lib/types";
+import { restaurant } from "@/lib/restaurant";
+import type { Category, MenuItem, NewOrder, Order, OrderStatus } from "@/lib/types";
 
 /**
  * In-memory store for demo mode. Lives on globalThis so dev hot reloads keep
  * it; on serverless each instance has its own copy, which resets on cold start.
  */
-type Store = { version: number; categories: Category[]; items: MenuItem[]; orders: Order[]; nextNumber: number };
+type Store = { version: number; categories: Category[]; items: MenuItem[]; orders: Order[]; nextNumber: number; nextWalkIn: number };
 
 /** Bump when the seed changes shape, so a running dev server reseeds instead of serving stale data. */
-const STORE_VERSION = 2;
+const STORE_VERSION = 4;
 
 const g = globalThis as typeof globalThis & { __cbDinerStore?: Store };
 
@@ -56,6 +57,51 @@ export function resetDemoStore() {
   g.__cbDinerStore = undefined;
 }
 
+function addOrder(s: Store, input: NewOrder): Order {
+  const { lines, total } = priceOrder(s.items, input.lines);
+  const createdAt = new Date(now()).toISOString();
+  const order: Order = {
+    id: crypto.randomUUID(),
+    number: s.nextNumber++,
+    table: input.table,
+    customerName: input.customerName,
+    note: input.note,
+    lines,
+    total,
+    status: "new",
+    createdAt,
+    updatedAt: createdAt,
+  };
+  s.orders.unshift(order);
+  if (s.orders.length > 500) s.orders.length = 500;
+  return order;
+}
+
+const WALK_IN_NOTES = [null, null, null, "Steak medium-rare please", "Nut allergy at the table", "Sauce on the side", "Birthday — candle on dessert"];
+const WALK_IN_NAMES = [null, null, null, "Olivia", "James", "Sophia", "Marcus"];
+
+/**
+ * Keeps the kitchen screen busy without a database: whenever staff screens
+ * poll, a new table order arrives every one to two minutes (at most six
+ * waiting at once), so the bell and the "new" flash can be seen live.
+ */
+function walkIn(s: Store) {
+  const t = now();
+  if (t < s.nextWalkIn) return;
+  s.nextWalkIn = t + 60_000 + Math.random() * 60_000;
+  if (s.orders.filter((o) => o.status === "new").length >= 6) return;
+  const menu = s.items.filter((i) => i.isAvailable);
+  if (!menu.length) return;
+  const pick = <T,>(list: T[]) => list[Math.floor(Math.random() * list.length)];
+  const lines = Array.from({ length: 2 + Math.floor(Math.random() * 3) }, () => ({ itemId: pick(menu).id, qty: 1 + Math.floor(Math.random() * 2) }));
+  addOrder(s, {
+    table: Math.random() < 0.15 ? null : String(1 + Math.floor(Math.random() * restaurant.tableCount)),
+    customerName: pick(WALK_IN_NAMES),
+    note: pick(WALK_IN_NOTES),
+    lines,
+  });
+}
+
 function store(): Store {
   if (g.__cbDinerStore?.version !== STORE_VERSION) {
     g.__cbDinerStore = {
@@ -64,6 +110,7 @@ function store(): Store {
       items: structuredClone(SEED_ITEMS),
       orders: seedOrders(now()),
       nextNumber: 1051,
+      nextWalkIn: now() + 45_000,
     };
   }
   return g.__cbDinerStore;
@@ -120,24 +167,7 @@ export const demoRepo: Repo = {
   },
 
   async createOrder(input) {
-    const s = store();
-    const { lines, total } = priceOrder(s.items, input.lines);
-    const createdAt = new Date(now()).toISOString();
-    const order: Order = {
-      id: crypto.randomUUID(),
-      number: s.nextNumber++,
-      table: input.table,
-      customerName: input.customerName,
-      note: input.note,
-      lines,
-      total,
-      status: "new",
-      createdAt,
-      updatedAt: createdAt,
-    };
-    s.orders.unshift(order);
-    if (s.orders.length > 500) s.orders.length = 500;
-    return clone(order);
+    return clone(addOrder(store(), input));
   },
 
   async getOrder(id) {
@@ -146,6 +176,7 @@ export const demoRepo: Repo = {
   },
 
   async listOrders(since) {
+    walkIn(store());
     const t = since.getTime();
     return clone(
       store()

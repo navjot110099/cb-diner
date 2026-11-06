@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getStaff } from "@/lib/auth";
 import { now } from "@/lib/clock";
 import { repo, UnavailableError } from "@/lib/db";
+import { log } from "@/lib/log";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { isValidTable } from "@/lib/restaurant";
 
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
     if (error instanceof UnavailableError) {
       return NextResponse.json({ error: "unavailable", itemIds: error.itemIds }, { status: 409 });
     }
-    console.error("createOrder failed", error);
+    log.error("createOrder failed", error);
     return NextResponse.json({ error: "Could not place the order" }, { status: 500 });
   }
 }

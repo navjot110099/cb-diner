@@ -10,8 +10,8 @@ import type { StaffRole, StaffUser } from "@/lib/types";
 export const DEMO_STAFF_COOKIE = "cb_demo_staff";
 
 const DEMO_STAFF: Record<StaffRole, StaffUser> = {
-  kitchen: { id: "demo-kitchen", name: "Kitchen (demo)", email: null, role: "kitchen" },
-  admin: { id: "demo-owner", name: "Owner (demo)", email: null, role: "admin" },
+  kitchen: { id: "demo-kitchen", name: "Kitchen", email: null, role: "kitchen" },
+  admin: { id: "demo-owner", name: "Owner", email: null, role: "admin" },
 };
 
 export const getStaff = cache(async (): Promise<StaffUser | null> => {

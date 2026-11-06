@@ -23,6 +23,8 @@
   --color-gold-deep: var(--gold-deep);
   --color-rose-gold: var(--rose-gold);
   --color-sage: var(--sage);
+  --color-sage-deep: var(--sage-deep);
+  --color-rose-deep: var(--rose-deep);
   --color-wine: var(--wine);
 
   --color-ring: var(--ring);
@@ -87,6 +89,9 @@
   --gold-deep: #7d5f33;
   --rose-gold: #9c6b5a;
   --sage: #5b7656;
+  /* Darker text shades of sage and rose gold: ≥5.5:1 on ivory and linen for small labels. */
+  --sage-deep: #4f6a4b;
+  --rose-deep: #86584a;
   --wine: #7a2e2e;
 
   --background: var(--ivory);
@@ -141,6 +146,10 @@
     --tw-numeric-figure: lining-nums;
     font-variant-numeric: lining-nums;
   }
+  .font-display em,
+  em.font-display {
+    font-family: var(--font-cormorant-italic), var(--font-display);
+  }
   ::selection {
     background: color-mix(in oklab, var(--gold-light) 60%, transparent);
   }
@@ -181,12 +190,6 @@
   &::-webkit-scrollbar {
     display: none;
   }
-}
-
-/* Skip layout/paint for off-screen menu sections on low-end phones. */
-@utility cv-auto {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 900px;
 }
 
 @utility pb-safe {

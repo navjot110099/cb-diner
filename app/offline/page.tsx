@@ -4,7 +4,7 @@ import { WifiOff } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { restaurant } from "@/lib/restaurant";
 
-export const metadata: Metadata = { title: "Offline", robots: { index: false } };
+export const metadata: Metadata = { title: "Offline", description: "You are offline. The saved CB Diner menu still works.", robots: { index: false } };
 
 /** Fallback page the service worker serves when a page isn't cached and there's no connection. */
 export default function OfflinePage() {

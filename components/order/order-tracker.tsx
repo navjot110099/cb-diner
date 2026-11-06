@@ -5,6 +5,7 @@ import Link from "next/link";
 import { m } from "framer-motion";
 import { Check, ChefHat, CircleX, ClipboardList, ConciergeBell, UtensilsCrossed } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { InstallCard } from "@/components/pwa/install-card";
 import { WhatsAppIcon } from "@/components/site/icons";
 import { clockTime, dollars } from "@/lib/format";
@@ -27,7 +28,15 @@ const HEADLINE: Record<OrderStatus, string> = {
 };
 
 /** Guest view of one order. Polls every few seconds until it's served. */
-export function OrderTracker({ initial, justPlaced }: { initial: Order; justPlaced: boolean }) {
+export function OrderTracker(props: { initial: Order; justPlaced: boolean }) {
+  return (
+    <MotionProvider>
+      <OrderTrackerView {...props} />
+    </MotionProvider>
+  );
+}
+
+function OrderTrackerView({ initial, justPlaced }: { initial: Order; justPlaced: boolean }) {
   const [order, setOrder] = useState(initial);
   const done = order.status === "served" || order.status === "cancelled";
 
@@ -62,8 +71,9 @@ export function OrderTracker({ initial, justPlaced }: { initial: Order; justPlac
       <header className="bg-night relative isolate overflow-hidden text-ivory">
         <span className="bg-gold absolute inset-x-0 bottom-0 h-px opacity-60" aria-hidden="true" />
         <div className="mx-auto flex max-w-2xl items-center justify-between px-5 py-5 sm:px-6">
-          <Link href={menuHref} aria-label="Back to the menu">
+          <Link href={menuHref}>
             <Logo tone="light" />
+            <span className="sr-only"> – back to the menu</span>
           </Link>
           <a href={restaurant.phoneHref} className="text-sm text-ivory/70 underline-offset-4 hover:text-ivory hover:underline">
             {restaurant.phone}
@@ -99,7 +109,7 @@ export function OrderTracker({ initial, justPlaced }: { initial: Order; justPlac
             <div className="mb-6 flex items-center justify-between">
               <h2 className="eyebrow text-stone">Live status</h2>
               {!done && (
-                <span className="eyebrow inline-flex items-center gap-1.5 !text-[10px] text-sage">
+                <span className="eyebrow inline-flex items-center gap-1.5 !text-[10px] text-sage-deep">
                   <span className="size-1.5 animate-pulse rounded-full bg-sage" /> Live
                 </span>
               )}
@@ -170,7 +180,6 @@ export function OrderTracker({ initial, justPlaced }: { initial: Order; justPlac
 
         <InstallCard />
 
-        <p className="pt-4 text-center text-xs text-stone">Demo project by OVIOWEB</p>
       </main>
     </div>
   );

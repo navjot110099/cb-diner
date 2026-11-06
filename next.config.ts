@@ -9,6 +9,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Put <title>/<meta> in the initial <head> for every client (not only known bots), so share previews and SEO tools see them.
+  htmlLimitedBots: /.*/,
   experimental: {
     // Dish photos are resized in the browser, but give uploads some headroom (Vercel caps bodies at 4.5 MB).
     serverActions: { bodySizeLimit: "4mb" },

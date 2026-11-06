@@ -27,7 +27,7 @@ An installable, mobile-first web app for **CB Diner**, a (fictional) prime steak
 - New orders ring a synthesised bell through the Web Audio API (no audio file), vibrate the device, flash the ticket and show the count in the tab title.
 - Ticket timers turn amber after 10 minutes and red after 20. The screen stays awake while sound is on, using the Screen Wake Lock API.
 - Each ticket has one-tap Start, Mark served, Undo and Cancel (with confirmation). Updates are optimistic and roll back if the save fails.
-- In demo mode the board polls every 3 s and updates instantly between tabs in the same browser (BroadcastChannel). There is also a **Simulate order** button.
+- Without Supabase keys the board polls every 3 s and updates instantly between tabs in the same browser (BroadcastChannel). The in-memory store also sends in a new table order every one to two minutes while staff screens are open, so the bell can be seen live.
 
 **Admin (`/admin`)**
 
@@ -121,7 +121,7 @@ The demo menu lives in [`lib/demo/seed.ts`](lib/demo/seed.ts).
 | --- | --- |
 | `npm run dev` | Dev server. The service worker is off unless `NEXT_PUBLIC_SW_DEV=1`. |
 | `npm run build` / `npm start` | Production build and server. |
-| `npm run lint` | ESLint. |
+| `npm run lint` | ESLint, including `no-console`: app code logs through `lib/log.ts`, which only prints debug and warning output in development or with `NEXT_PUBLIC_DEBUG=1`. |
 | `npm run seed` | Loads the demo menu into Supabase. |
 | `npm run assets` | Re-renders icons, iOS splash screens, the favicon and the OG image with Playwright. |
 | `npm run screenshots` | Walks the full flow against a running server and saves 21 screens at 1440×900 and 390×844 to `/screenshots`. Set `SCREENSHOT_BASE_URL`, e.g. `http://localhost:3000`. |

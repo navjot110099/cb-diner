@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Phone, QrCode, ScanLine, Smartphone, Star } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
@@ -15,6 +16,8 @@ import { restaurant } from "@/lib/restaurant";
 import { siteUrl } from "@/lib/site-url";
 
 export const revalidate = 300;
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const STEPS = [
   { icon: ScanLine, title: "Scan the code on your table", body: "The menu opens on your phone with your table number already set — no app, no sign-up." },
@@ -54,7 +57,7 @@ export default async function HomePage() {
         </picture>
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(20,17,16,.55)_0%,rgba(20,17,16,.35)_35%,rgba(20,17,16,.92)_100%)] md:bg-[linear-gradient(95deg,rgba(20,17,16,.95)_0%,rgba(20,17,16,.75)_45%,rgba(20,17,16,.2)_100%)]" />
         <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-5 sm:px-8">
-          <Link href="/" aria-label="CB Diner home">
+          <Link href="/">
             <Logo tone="light" />
           </Link>
           <div className="flex items-center gap-1 text-sm sm:gap-2">
@@ -176,7 +179,16 @@ export default async function HomePage() {
         <section id="story" className="mx-auto grid max-w-7xl gap-12 px-5 py-20 sm:px-8 md:py-28 lg:grid-cols-2 lg:items-center">
           <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/img/dining-room.webp" alt="Set tables in the CB Diner dining room" loading="lazy" decoding="async" className="aspect-[5/4] w-full rounded-[2rem] object-cover ring-1 ring-border" />
+            <img
+              src="/img/dining-room.webp"
+              srcSet="/img/dining-room-sm.webp 700w, /img/dining-room.webp 1400w"
+              sizes="(min-width: 1280px) 584px, (min-width: 1024px) 45vw, 100vw"
+              width={1400}
+              height={1000}
+              alt="Set tables in the CB Diner dining room"
+              loading="lazy"
+              decoding="async"
+              className="aspect-[5/4] w-full rounded-[2rem] object-cover ring-1 ring-border" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/img/chef-sm.webp"
@@ -245,7 +257,7 @@ export default async function HomePage() {
               </div>
               <div className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-3xl bg-card p-6 ring-1 ring-border">
                 <div>
-                  <p className="flex items-center gap-1 text-gold" aria-label={`${restaurant.rating} out of 5 stars`}>
+                  <p role="img" className="flex items-center gap-1 text-gold" aria-label={`${restaurant.rating} out of 5 stars`}>
                     {Array.from({ length: 5 }, (_, i) => (
                       <Star key={i} className="size-4 fill-current" />
                     ))}

@@ -7,7 +7,7 @@ import { demoSignIn } from "@/app/staff/actions";
 import { safeNext } from "@/lib/auth";
 import { isDemoMode } from "@/lib/env";
 
-export const metadata: Metadata = { title: "Staff login", robots: { index: false } };
+export const metadata: Metadata = { title: "Staff login", description: "Sign-in for CB Diner kitchen staff and owners.", robots: { index: false } };
 
 export default async function StaffLoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const { next } = await searchParams;
@@ -24,9 +24,6 @@ export default async function StaffLoginPage({ searchParams }: { searchParams: P
 
         {isDemoMode ? (
           <div className="mt-6 space-y-3">
-            <p className="rounded-xl bg-accent px-3 py-2 text-sm text-gold-deep">
-              Demo mode — no Supabase keys are set, so pick a role to look around. Changes stay in this server’s memory.
-            </p>
             <form action={demoSignIn} className="grid gap-3">
               <input type="hidden" name="next" value={nextPath} />
               <button
@@ -65,7 +62,6 @@ export default async function StaffLoginPage({ searchParams }: { searchParams: P
           <Link href="/menu" className="underline-offset-4 hover:underline">
             Guest menu
           </Link>{" "}
-          · Demo project by OVIOWEB
         </p>
       </div>
     </div>

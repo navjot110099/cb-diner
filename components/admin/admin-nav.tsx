@@ -13,13 +13,13 @@ const LINKS = [
   { href: "/kitchen", label: "Kitchen", icon: ChefHat },
 ];
 
-export function AdminNav({ name, demo }: { name: string; demo: boolean }) {
+export function AdminNav({ name }: { name: string }) {
   const pathname = usePathname();
   return (
     <header className="bg-night sticky top-0 z-30 text-ivory no-print">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-6">
         <Link href="/admin" className="mr-auto">
-          <Logo tone="light" sub={demo ? "Admin · demo mode" : "Admin"} />
+          <Logo tone="light" sub="Admin" />
         </Link>
         <nav className="order-last -mx-1 flex w-full gap-1 overflow-x-auto sm:order-none sm:w-auto">
           {LINKS.map(({ href, label, icon: Icon }) => {

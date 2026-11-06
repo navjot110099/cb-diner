@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Switch } from "@/components/ui/switch";
 import { Logo } from "@/components/brand/logo";
 import { CartProvider, useCart } from "@/components/cart/cart-context";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { CartBar } from "@/components/cart/cart-bar";
 import { CartContents } from "@/components/cart/cart-contents";
 import { ItemSheet } from "@/components/menu/item-sheet";
@@ -22,9 +23,11 @@ type Props = { categories: Category[]; items: MenuItem[]; initialTable: string |
 
 export function MenuApp({ categories, items, initialTable }: Props) {
   return (
-    <CartProvider items={items} initialTable={initialTable}>
-      <MenuScreen categories={categories} items={items} />
-    </CartProvider>
+    <MotionProvider>
+      <CartProvider items={items} initialTable={initialTable}>
+        <MenuScreen categories={categories} items={items} />
+      </CartProvider>
+    </MotionProvider>
   );
 }
 
@@ -101,19 +104,24 @@ function MenuScreen({ categories, items }: Omit<Props, "initialTable">) {
       {/* Welcome banner */}
       <header className="relative isolate overflow-hidden bg-espresso text-ivory">
         <picture>
-          <source media="(min-width: 768px)" srcSet="/img/hero-dining.webp" />
+          <source media="(min-width: 768px)" srcSet="/img/hero-dining-sm.webp" />
           { }
-          <img src="/img/hero-dining-sm.webp" alt="" fetchPriority="high" className="absolute inset-0 -z-20 size-full object-cover" />
+          <img src="/img/hero-dining-xs.webp" alt="" fetchPriority="high" width={720} height={480} className="absolute inset-0 -z-20 size-full object-cover" />
         </picture>
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,rgba(20,17,16,.94)_0%,rgba(30,26,23,.82)_45%,rgba(30,26,23,.45)_80%,rgba(156,107,90,.25)_100%)]" />
         <span className="bg-gold absolute inset-x-0 bottom-0 h-px opacity-70" aria-hidden="true" />
         <div className="mx-auto flex max-w-[1360px] flex-col gap-6 px-4 pt-5 pb-7 sm:px-6 lg:px-8 lg:pt-6 lg:pb-10">
           <div className="flex items-center justify-between gap-3">
-            <Link href="/" aria-label="CB Diner home">
+            <Link href="/">
               <Logo tone="light" />
             </Link>
             <div className="flex items-center gap-2">
-              <InstallButton className="hidden border-white/20 bg-white/5 text-ivory hover:bg-white/15 hover:text-ivory md:inline-flex" />
+              <span className="hidden md:inline-flex">
+                <InstallButton className="border-white/20 bg-white/5 text-ivory hover:bg-white/15 hover:text-ivory" />
+              </span>
+              <span className="inline-flex md:hidden">
+                <InstallButton compact className="border-white/15 bg-white/6 text-gold-light hover:bg-white/15 hover:text-gold-light" />
+              </span>
               <a
                 href={restaurant.phoneHref}
                 aria-label={`Call ${restaurant.phone}`}
@@ -168,7 +176,7 @@ function MenuScreen({ categories, items }: Omit<Props, "initialTable">) {
             )}
           </label>
           <label className="flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-input bg-white pr-2.5 pl-3.5 text-[13px] font-semibold">
-            <span className="inline-flex size-[18px] items-center justify-center rounded-full border border-sage/50 text-[9.5px] font-bold text-sage">V</span>
+            <span className="inline-flex size-[18px] items-center justify-center rounded-full border border-sage/50 text-[9.5px] font-bold text-sage-deep">V</span>
             <span className="hidden min-[400px]:inline">Vegetarian</span>
             <Switch checked={vegOnly} onCheckedChange={setVegOnly} aria-label="Show vegetarian dishes only" className="data-[state=checked]:bg-sage" />
           </label>
@@ -240,7 +248,7 @@ function MenuScreen({ categories, items }: Omit<Props, "initialTable">) {
                 key={cat.id}
                 id={`cat-${cat.id}`}
                 aria-labelledby={`cat-${cat.id}-title`}
-                className={cn("scroll-mt-[124px] pt-9 lg:scroll-mt-[84px]", si > 1 && "cv-auto")}
+                className="scroll-mt-[124px] pt-9 lg:scroll-mt-[84px]"
               >
                 <p className="eyebrow text-gold-deep">{String(categories.findIndex((c) => c.id === cat.id) + 1).padStart(2, "0")}</p>
                 <h2 id={`cat-${cat.id}-title`} className="mt-1 font-display text-[2rem] leading-none font-semibold text-espresso">
@@ -307,7 +315,7 @@ function MenuFooter() {
         <Link href="/" className="underline-offset-4 hover:underline">
           cbdiner
         </Link>{" "}
-        · Demo project by OVIOWEB
+        · Concept project by OVIOWEB
       </p>
     </footer>
   );

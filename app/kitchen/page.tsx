@@ -16,7 +16,6 @@ export default async function KitchenPage() {
       <KitchenBoard
         initial={orders}
         staff={staff}
-        demo={isDemoMode}
         mode={isDemoMode ? { kind: "polling" } : { kind: "realtime", url: env.supabaseUrl, anonKey: env.supabaseAnonKey }}
       />
       <Toaster position="bottom-right" />

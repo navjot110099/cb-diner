@@ -1,2 +1,4 @@
 portfolio
 screenshots
+.env
+.env*.local

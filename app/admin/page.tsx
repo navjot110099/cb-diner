@@ -70,7 +70,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
             <tbody className="divide-y divide-border">
               {orders.slice(0, 6).map((o) => (
                 <tr key={o.id}>
-                  <td className="px-5 py-3 font-semibold">#{o.number}</td>
+                  <td className="px-5 py-3 font-semibold whitespace-nowrap">
+                    #{o.number}
+                  </td>
                   <td className="px-3 py-3">{o.table ?? "Pickup"}</td>
                   <td className="max-w-[240px] truncate px-3 py-3 text-stone">{o.lines.map((l) => `${l.qty}× ${l.name}`).join(", ")}</td>
                   <td className="px-3 py-3 text-stone tabular-nums">{clockTime(o.createdAt)}</td>
@@ -79,8 +81,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
                       className={cn(
                         "eyebrow rounded-full px-2.5 py-1 !text-[9.5px]",
                         o.status === "new" && "bg-gold-light/40 text-gold-deep",
-                        o.status === "preparing" && "bg-rose-gold/15 text-rose-gold",
-                        o.status === "served" && "bg-sage/15 text-sage",
+                        o.status === "preparing" && "bg-rose-gold/15 text-rose-deep",
+                        o.status === "served" && "bg-sage/15 text-sage-deep",
                         o.status === "cancelled" && "bg-linen text-stone line-through",
                       )}
                     >

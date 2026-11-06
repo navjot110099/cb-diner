@@ -8,13 +8,29 @@ import { cn } from "@/lib/utils";
  * Storage URLs), so there's no optimizer round-trip and the service worker
  * can cache them. Falls back to a quiet monogram tile when offline or missing.
  */
-export function FoodImage({ src, alt, className, priority = false }: { src: string | null | undefined; alt: string; className?: string; priority?: boolean }) {
+export function FoodImage({
+  src,
+  alt,
+  className,
+  priority = false,
+  sizes,
+}: {
+  src: string | null | undefined;
+  alt: string;
+  className?: string;
+  priority?: boolean;
+  /** Rendered width, e.g. "118px". Seed thumbnails then pick a 224px or 288px file. */
+  sizes?: string;
+}) {
   const [failed, setFailed] = useState(false);
   if (!src || failed) return <FoodPlaceholder className={className} />;
+  const thumb = sizes ? src.match(/^(\/food\/.+)-sq\.webp$/) : null;
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
+      srcSet={thumb ? `${thumb[1]}-sq-224.webp 224w, ${src} 288w` : undefined}
+      sizes={thumb ? sizes : undefined}
       alt={alt}
       loading={priority ? "eager" : "lazy"}
       decoding="async"

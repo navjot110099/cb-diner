@@ -11,6 +11,10 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // App code logs through lib/log.ts so production consoles stay clean.
+  { rules: { "no-console": "error" } },
+  // CLI scripts (seed, assets, screenshots, portfolio) print progress to the terminal.
+  { files: ["scripts/**", "portfolio/**"], rules: { "no-console": "off" } },
   {
     ignores: [
       "node_modules/**",

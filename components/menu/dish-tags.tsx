@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 
 const TAGS: Partial<Record<ItemTag, { label: string; icon: typeof Star; className: string }>> = {
   signature: { label: "Signature", icon: Star, className: "text-gold-deep" },
-  chef: { label: "Chef’s selection", icon: Sparkles, className: "text-rose-gold" },
+  chef: { label: "Chef’s selection", icon: Sparkles, className: "text-rose-deep" },
   shareable: { label: "For the table", icon: Users, className: "text-espresso-soft" },
-  seasonal: { label: "Seasonal", icon: Leaf, className: "text-sage" },
+  seasonal: { label: "Seasonal", icon: Leaf, className: "text-sage-deep" },
 };
 
 /** Signature / Chef’s selection / For the table / Seasonal / New. */
