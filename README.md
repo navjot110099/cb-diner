@@ -1,5 +1,7 @@
 # CB Diner — table-ordering PWA for a Park Avenue steakhouse
 
+**Live site: [cb-diner.vercel.app](https://cb-diner.vercel.app)** · [Table menu](https://cb-diner.vercel.app/menu?table=5) · [Staff sign-in](https://cb-diner.vercel.app/staff/login)
+
 ![CB Diner — table-ordering PWA](portfolio/slide-01.png)
 
 An installable, mobile-first web app for **CB Diner**, a (fictional) prime steakhouse and raw bar on Park Avenue South, New York. Guests scan the QR code on their table, browse the menu, and order from their phone. The kitchen sees orders arrive live, with a bell. The owner edits dishes, prices, photos and availability from an admin screen.

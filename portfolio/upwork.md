@@ -43,4 +43,4 @@ Next.js 15, Supabase, Tailwind. Concept project – all content is demo data.
 
 ## Project link
 
-Not published yet. Add the live URL here after deploying.
+https://cb-diner.vercel.app
