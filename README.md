@@ -2,11 +2,9 @@
 
 **Live site: [cb-diner.vercel.app](https://cb-diner.vercel.app)** · [Table menu](https://cb-diner.vercel.app/menu?table=5) · [Staff sign-in](https://cb-diner.vercel.app/staff/login)
 
-![CB Diner — table-ordering PWA](portfolio/slide-01.png)
+An installable, mobile-first web app for **CB Diner**, a prime steakhouse and raw bar on Park Avenue South, New York. Guests scan the QR code on their table, browse the menu, and order from their phone. The kitchen sees orders arrive live, with a bell. The owner edits dishes, prices, photos and availability from an admin screen.
 
-An installable, mobile-first web app for **CB Diner**, a (fictional) prime steakhouse and raw bar on Park Avenue South, New York. Guests scan the QR code on their table, browse the menu, and order from their phone. The kitchen sees orders arrive live, with a bell. The owner edits dishes, prices, photos and availability from an admin screen.
-
-> Demo project by OVIOWEB. All restaurant details, reviews and orders are demo data. Phone numbers use the fictional 555-01xx range.
+> Designed &amp; built by **OVIOWEB**.
 
 ## Features
 
@@ -18,7 +16,7 @@ An installable, mobile-first web app for **CB Diner**, a (fictional) prime steak
 - Each dish shows a photo, price in **$**, dietary marks (**V** vegetarian, **VG** vegan, **GF** gluten-free) and labels (Signature, Chef’s selection, For the table, Seasonal, New).
 - Tapping a dish opens a sheet with a large photo. Sold-out dishes stay visible but greyed out.
 - The cart is a bottom sheet on phones and a side panel on desktop. It keeps quantities, the table, the guest's name and a note for the kitchen (steak temperature, allergies). The cart survives refreshes.
-- **Place order** saves the order (to Supabase, or the demo store). Prices are always recalculated on the server, and if a dish has just sold out it is removed with a message.
+- **Place order** saves the order (to Supabase, or the built-in store). Prices are always recalculated on the server, and if a dish has just sold out it is removed with a message.
 - **Send on WhatsApp** opens `wa.me` with the order prefilled. It still works when the network is too weak to place the order.
 - The live order page polls until the order is served. It also offers a “Send a copy on WhatsApp” button and an “Order more” link.
 
@@ -76,15 +74,15 @@ cp .env.example .env.local   # every value is optional
 npm run dev                   # http://localhost:3000
 ```
 
-With no Supabase keys the app runs in **demo mode**:
+With no Supabase keys the app runs in **zero-config mode**:
 
 - An in-memory store is seeded with the menu and tonight's orders.
 - Staff sign in with one tap on `/staff/login` (Kitchen staff or Owner).
 - Uploads are kept as data URLs.
 
-Demo data resets whenever the server restarts (on Vercel, each serverless instance has its own copy).
+Seeded data resets whenever the server restarts (on Vercel, each serverless instance has its own copy).
 
-Set `NEXT_PUBLIC_DEMO_TIME=19:40` to make the demo look like dinner service at any hour of the day. Leave it empty for a real restaurant.
+Set `NEXT_PUBLIC_DEMO_TIME=19:40` to preview dinner service at any hour of the day. Leave it empty to use the current time.
 
 ### Going live with Supabase
 
@@ -115,7 +113,7 @@ Edit [`lib/restaurant.ts`](lib/restaurant.ts) for the name, address, hours and t
 - `NEXT_PUBLIC_MAPS_QUERY` and an optional `NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY`
 - `NEXT_PUBLIC_GOOGLE_PLACE_ID`, which powers the review link
 
-The demo menu lives in [`lib/demo/seed.ts`](lib/demo/seed.ts).
+The seeded menu lives in [`lib/demo/seed.ts`](lib/demo/seed.ts).
 
 ## Scripts
 
@@ -124,7 +122,7 @@ The demo menu lives in [`lib/demo/seed.ts`](lib/demo/seed.ts).
 | `npm run dev` | Dev server. The service worker is off unless `NEXT_PUBLIC_SW_DEV=1`. |
 | `npm run build` / `npm start` | Production build and server. |
 | `npm run lint` | ESLint, including `no-console`: app code logs through `lib/log.ts`, which only prints debug and warning output in development or with `NEXT_PUBLIC_DEBUG=1`. |
-| `npm run seed` | Loads the demo menu into Supabase. |
+| `npm run seed` | Loads the seeded menu into Supabase. |
 | `npm run assets` | Re-renders icons, iOS splash screens, the favicon and the OG image with Playwright. |
 | `npm run screenshots` | Walks the full flow against a running server and saves 21 screens at 1440×900 and 390×844 to `/screenshots`. Set `SCREENSHOT_BASE_URL`, e.g. `http://localhost:3000`. |
 
@@ -133,7 +131,7 @@ The demo menu lives in [`lib/demo/seed.ts`](lib/demo/seed.ts).
 1. Import the repository and add the environment variables from `.env.example`.
 2. Deploy. The app reads `VERCEL_PROJECT_PRODUCTION_URL` when `NEXT_PUBLIC_SITE_URL` isn't set.
 
-If you skip the Supabase keys, the deployment runs in demo mode.
+If you skip the Supabase keys, the deployment runs in zero-config mode.
 
 ## Project layout
 
@@ -150,22 +148,10 @@ app/
   manifest.ts, offline/    PWA
 components/                menu, cart, kitchen, admin, pwa, site
 lib/
-  db/                      Repo interface, demo store, Supabase repo
+  db/                      Repo interface, built-in store, Supabase repo
   restaurant.ts, hours.ts  public details + open/closed logic
 supabase/schema.sql
 scripts/                   seed, assets, screenshots
 ```
-
-## Portfolio deck
-
-`portfolio/slide-01.png … slide-10.png` (2000×1125) and `portfolio/upwork.md` are built from real screens:
-
-```bash
-NEXT_PUBLIC_SITE_URL=https://cb-diner.vercel.app npm run build && npm start -- -p 3117
-PORTFOLIO_BASE_URL=http://localhost:3117 npx tsx portfolio/source/capture.ts   # 1440×900 @2x, 390×844 @3x + marker anchors
-npx tsx portfolio/source/render.ts                                              # HTML slides → PNG
-```
-
-Rebuild without the `NEXT_PUBLIC_SITE_URL` override afterwards. `portfolio/` is excluded from Vercel deploys.
 
 Photo credits are in [IMAGE_CREDITS.md](IMAGE_CREDITS.md) (all Unsplash License).

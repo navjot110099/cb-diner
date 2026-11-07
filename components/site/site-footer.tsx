@@ -44,7 +44,7 @@ export function SiteFooter() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-5 text-xs text-ivory/50 sm:px-8">
           <p>© {new Date().getFullYear()} CB Diner · Prices exclude tax and gratuity</p>
-          <p>Concept project by OVIOWEB</p>
+          <p>Website by OVIOWEB</p>
         </div>
       </div>
     </footer>

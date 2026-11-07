@@ -315,7 +315,7 @@ function MenuFooter() {
         <Link href="/" className="underline-offset-4 hover:underline">
           cbdiner
         </Link>{" "}
-        · Concept project by OVIOWEB
+        · Website by OVIOWEB
       </p>
     </footer>
   );

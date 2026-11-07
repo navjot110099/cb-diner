@@ -17,7 +17,7 @@ export async function demoSignIn(formData: FormData) {
 export type SignInState = { error: string | null };
 
 export async function signIn(_prev: SignInState, formData: FormData): Promise<SignInState> {
-  if (isDemoMode) return { error: "Demo mode: use the buttons above." };
+  if (isDemoMode) return { error: "Use the quick sign-in buttons above." };
   if (!rateLimit(`login:${await clientIp()}`, 8, 10 * 60_000).ok) return { error: "Too many attempts. Try again in a few minutes." };
 
   const email = String(formData.get("email") ?? "").trim();
